@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SVG Paint Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-6">
+            <form method="post" action="/login">
+                <table>
+                    <tr>
+                        <td colspan="2"><b><u>Login</u></b></td>
+                    </tr>
+                    <tr>
+                        <td><b>username: </b></td>
+                        <td><input id="usernameTF" type="text" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>Password: </b></td>
+                        <td><input id="passwordTF" type="password" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="loginButton" class="btn btn-primary">Log In</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="col-lg-6">
+
+                <table>
+                    <tr>
+                        <td colspan="2"><b><u>Create User</u></b></td>
+                    </tr>
+                    <tr>
+                        <td><b>New Username: </b></td>
+                        <td><input type="text" id="newusernameTF" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>New Password: </b></td>
+                        <td><input type="password" id="newpasswordTF" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>Confirm Password: </b></td>
+                        <td><input type="password" id="confirmedpasswordTF" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="createuserButton" class="btn btn-primary">Create Account</button>
+                        </td>
+                    </tr>
+                </table>
+
+        </div>
+    </div>
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>

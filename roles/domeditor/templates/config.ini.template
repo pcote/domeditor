@@ -1,0 +1,4 @@
+[dbconfig]
+username=root
+password={{mysql_root_password}}
+database={{appname}}
