@@ -51,10 +51,10 @@
     <tr>
         <td>{{number}}</td>
         <td>{{domNumber}}</td>
-        <td><input type="text" /></td>
-        <td><input type="text" /></td>
-        <td><button class="btn btn-primary">save</button></td>
-        <td><button class="btn btn-danger">revert</button></td>
+        <td><input type="text" id="person{{number}}" /></td>
+        <td><input type="text" id="action{{number}}" /></td>
+        <td><button id="save{{number}}" class="btn btn-primary saveButton">save</button></td>
+        <td><button id="revert{{number}}" class="btn btn-danger revertButton">revert</button></td>
     </tr>
     {{/each}}
 </table>

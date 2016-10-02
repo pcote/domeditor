@@ -38,4 +38,19 @@ $(function(){
     var renderedDom = $(renderedText);
     $("#tableDiv").append(renderedDom);
 
+
+    var saveButtonHandler = function(evt){
+        var btn = this;
+        console.log(btn);
+    };
+
+    var revertButtonHandler = function(evt){
+        var btn = this;
+        console.log(btn);
+    };
+
+    $(".table").on("click", ".saveButton", saveButtonHandler);
+
+    $(".table").on("click", ".revertButton", revertButtonHandler);
+
 });
