@@ -21,6 +21,19 @@ $(function(){
         return domNumber;
     };
 
+    var numberFromName = function(name){
+        var numberLoc = name.search(/\d+/);
+        var numberString = name.substring(numberLoc);
+        var num = Number(numberString);
+        return num;
+    };
+
+    var getFieldValue = function(fieldBase, fieldNum){
+        var twoDigitNum = twoDigitFormat(fieldNum);
+        var fieldId = "#" + fieldBase + twoDigitNum;
+        return $(fieldId).val();
+    };
+
     var i;
     var numList = _.range(0,100);
     var domNumbers = [];
@@ -41,12 +54,22 @@ $(function(){
 
     var saveButtonHandler = function(evt){
         var btn = this;
-        console.log(btn);
+        id = btn.getAttribute("id");
+        var num = numberFromName(id);
+        var person = getFieldValue("person", num);
+        var action = getFieldValue("action", num);
+        console.log(person);
+        console.log(action);
     };
 
     var revertButtonHandler = function(evt){
         var btn = this;
-        console.log(btn);
+        id = btn.getAttribute("id");
+        var num = numberFromName(id);
+        var person = getFieldValue("person", num);
+        var action = getFieldValue("action", num);
+        console.log(person);
+        console.log(action);
     };
 
     $(".table").on("click", ".saveButton", saveButtonHandler);
