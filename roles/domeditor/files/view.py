@@ -84,5 +84,10 @@ def get_user_creds():
     return jsonify(credentials)
 
 
+@app.route("/savedomnum", methods=["POST"])
+def save_dom_num():
+    return "Okay done with save dom num"
+
+
 if __name__ == '__main__':
     app.run(debug=True)

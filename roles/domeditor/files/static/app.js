@@ -51,6 +51,42 @@ $(function(){
     var renderedDom = $(renderedText);
     $("#tableDiv").append(renderedDom);
 
+    var getCreds = function(){
+        var req = {
+            url: "/usercreds",
+            method: "get"
+        };
+
+        var promise = $.ajax(req);
+        return promise;
+    };
+
+    var saveDomNumber = function(num, pers, act){
+        var __callback = function(creds){
+            var jsonOb = {number: num, person: pers, action: act};
+            var authString = "Basic " + btoa(creds.username + ":" + creds.password);
+
+            var req = {
+                url: "/savedomnum",
+                method: "post",
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": authString
+                },
+                data: JSON.stringify(jsonOb)
+            };
+
+            var promise = $.ajax(req);
+            return promise;
+        };
+
+        return __callback;
+    };
+
+
+    var declareResult = function(data){
+        alert(data);
+    };
 
     var saveButtonHandler = function(evt){
         var btn = this;
@@ -58,9 +94,12 @@ $(function(){
         var num = numberFromName(id);
         var person = getFieldValue("person", num);
         var action = getFieldValue("action", num);
-        console.log(person);
-        console.log(action);
+        var credsPromise = getCreds();
+        var saveDomCB = saveDomNumber(num, person, action);
+        var saveDomPromise = credsPromise.then(saveDomCB);
+        saveDomPromise.then(declareResult);
     };
+
 
     var revertButtonHandler = function(evt){
         var btn = this;
