@@ -34,6 +34,12 @@ $(function(){
         return $(fieldId).val();
     };
 
+    var setFieldValue = function(fieldBase, fieldNum, fieldVal){
+        var twoDigitNum = twoDigitFormat(fieldNum);
+        var fieldId = "#" + fieldBase + twoDigitNum;
+        $(fieldId).val(fieldVal);
+    };
+
     var i;
     var numList = _.range(0,100);
     var domNumbers = [];
@@ -101,14 +107,47 @@ $(function(){
     };
 
 
+    var revertDom = function(num){
+        var __callback = function(creds){
+            var uname = creds.username;
+            var pw = creds.password;
+            var authString = "Basic " + btoa(uname + ":" + pw);
+
+            var req = {
+                url: "/revert/" + num,
+                method: "get",
+                headers: {
+                    "Authorization": authString
+                }
+            };
+
+            var promise = $.ajax(req);
+            return promise;
+        };
+
+        return __callback;
+    };
+
+
+    var updateDomFields = function(data){
+        var num = data.number;
+        var person = data.person;
+        var action = data.action;
+        setFieldValue("person", num, person);
+        setFieldValue("action", num, action);
+    };
+
     var revertButtonHandler = function(evt){
         var btn = this;
         id = btn.getAttribute("id");
         var num = numberFromName(id);
         var person = getFieldValue("person", num);
         var action = getFieldValue("action", num);
-        console.log(person);
-        console.log(action);
+        var credsPromise = getCreds();
+        var revertDomCB = revertDom(num);
+        var revertDomPromise = credsPromise.then(revertDomCB);
+        revertDomPromise.then(updateDomFields);
+
     };
 
     $(".table").on("click", ".saveButton", saveButtonHandler);

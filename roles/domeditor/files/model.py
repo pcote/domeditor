@@ -111,3 +111,11 @@ def update_dom_num(uname, num, person, action):
     sess.add(dom_num)
     sess.commit()
     return "SUCCESS"
+
+
+def get_dom_num(uname, num):
+    sess = Session()
+    dom_num = sess.query(DomNumber).filter_by(user=uname, number=num).one_or_none()
+    dom_dict = dict(number=num, person=dom_num.person, action=dom_num.action)
+    sess.close()
+    return dom_dict

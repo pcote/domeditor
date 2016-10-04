@@ -101,6 +101,18 @@ def save_dom_num():
     else:
         return "FAILED"
 
+@app.route("/revert/<num>", methods=["GET"])
+def revert_number(num):
+    auth = request.authorization
+    uname = auth.username
+    pw = auth.password
+
+    if model.is_password_valid(uname, pw, prehashed=True):
+        dom_num = model.get_dom_num(uname, num)
+        return jsonify(dom_num)
+    else:
+        abort(401)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
