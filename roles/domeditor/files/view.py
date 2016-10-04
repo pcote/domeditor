@@ -87,7 +87,19 @@ def get_user_creds():
 
 @app.route("/savedomnum", methods=["POST"])
 def save_dom_num():
-    return "Okay done with save dom num"
+    auth = request.authorization
+    json_data = request.get_json()
+    user = auth.username
+    pw = auth.password
+    num = json_data.get("number")
+    person = json_data.get("person")
+    action = json_data.get("action")
+
+    if model.is_password_valid(user, pw, prehashed=True):
+        result = model.update_dom_num(user, num, person, action)
+        return result
+    else:
+        return "FAILED"
 
 
 if __name__ == '__main__':

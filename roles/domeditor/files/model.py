@@ -102,3 +102,12 @@ def initialize_dom_numbers(uname):
 
     sess.commit()
     sess.close()
+
+def update_dom_num(uname, num, person, action):
+    sess = Session()
+    dom_num = sess.query(DomNumber).filter_by(user=uname, number=num).one_or_none()
+    dom_num.person = person
+    dom_num.action = action
+    sess.add(dom_num)
+    sess.commit()
+    return "SUCCESS"
