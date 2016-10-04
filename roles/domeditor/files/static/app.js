@@ -154,7 +154,7 @@ $(function(){
 
     $(".table").on("click", ".revertButton", revertButtonHandler);
 
-    /************ LOAD UP THE PAGE WITH CURRENT DOM NUMBERS FOR THIS USER ****************/
+    /************ LOAD UP HANDLERS FOR THE PAGE WITH CURRENT DOM NUMBERS FOR THIS USER ****************/
     var downloadDomSet = function(creds){
         var user = creds.username;
         var pw = creds.password;
@@ -185,8 +185,15 @@ $(function(){
         
     };
 
-    var credPromise = getCreds();
-    var downloadPromise = credPromise.then(downloadDomSet);
-    downloadPromise.then(updateAllFieldsCallback);
+    /******************************** END LOADING UP OF DOM NUMBERS *******************/
+
+    var btnResetHandler = function(evt){
+        var credPromise = getCreds();
+        var downloadPromise = credPromise.then(downloadDomSet);
+        downloadPromise.then(updateAllFieldsCallback);
+    };
+
+    $("#resetAllButton").click(btnResetHandler);
+    $("#resetAllButton").click(); // Done to do the initial value load on page load up.
 
 });
