@@ -22,6 +22,16 @@ eng = create_engine(db_url)
 
 Base = declarative_base()
 
+
+class DomNumber(Base):
+    __tablename__ = "domnumbers"
+    id = Column(Integer, primary_key=True)
+    number = Column(Integer)
+    person = Column(Text)
+    action = Column(Text)
+    user = Column(ForeignKey("users.username"))
+
+
 class User(Base):
     __tablename__ = "users"
     username = Column(VARCHAR(50), primary_key=True, nullable=False)
@@ -29,6 +39,7 @@ class User(Base):
     is_active = Column(Boolean, default=False)
     is_authenticated = Column(Boolean, default=False)
     is_anonymous = Column(Boolean, default=False)
+    dom_numbers = relationship("DomNumber")
 
     def get_id(self):
         return self.username
@@ -77,5 +88,17 @@ def set_authenticate(uname, auth_status):
     user = get_user(uname)
     user.is_authenticated = auth_status
     sess.add(user)
+    sess.commit()
+    sess.close()
+
+
+def initialize_dom_numbers(uname):
+    sess = Session()
+    user = sess.query(User).filter_by(username=uname).one_or_none()
+
+    for num in range(100):
+        dom_num = DomNumber(number=num, person="", action="")
+        user.dom_numbers.append(dom_num)
+
     sess.commit()
     sess.close()
