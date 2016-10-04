@@ -154,4 +154,39 @@ $(function(){
 
     $(".table").on("click", ".revertButton", revertButtonHandler);
 
+    /************ LOAD UP THE PAGE WITH CURRENT DOM NUMBERS FOR THIS USER ****************/
+    var downloadDomSet = function(creds){
+        var user = creds.username;
+        var pw = creds.password;
+        var authString = "Basic " + btoa(user + ":" + pw);
+
+        var req = {
+            url: "/alldoms",
+            method: "get",
+            headers: {
+                "Authorization": authString
+            }
+        };
+
+        var promise = $.ajax(req);
+        return promise;
+    };
+
+    var updateAllFieldsCallback = function(data){
+        var domNumbers = data.numbers;
+        var i;
+        var d;
+
+        for(i=0; i < domNumbers.length; i++){
+            d = domNumbers[i];
+            setFieldValue("person", d.number, d.person);
+            setFieldValue("action", d.number, d.action);
+        }
+        
+    };
+
+    var credPromise = getCreds();
+    var downloadPromise = credPromise.then(downloadDomSet);
+    downloadPromise.then(updateAllFieldsCallback);
+
 });

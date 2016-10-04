@@ -113,6 +113,17 @@ def revert_number(num):
     else:
         abort(401)
 
+@app.route("/alldoms", methods=["GET"])
+def get_all_doms():
+    auth = request.authorization
+    uname = auth.username
+    pw = auth.password
+
+    if model.is_password_valid(uname, pw, prehashed=True):
+        dom_set = model.get_all_doms(uname)
+        return jsonify(dict(numbers=dom_set))
+    else:
+        abort(401)
 
 if __name__ == '__main__':
     app.run(debug=True)

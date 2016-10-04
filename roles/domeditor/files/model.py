@@ -119,3 +119,16 @@ def get_dom_num(uname, num):
     dom_dict = dict(number=num, person=dom_num.person, action=dom_num.action)
     sess.close()
     return dom_dict
+
+
+def get_all_doms(uname):
+    sess = Session()
+    doms = sess.query(DomNumber).filter_by(user=uname).all()
+    num_list = []
+    from pdb import set_trace
+
+    for dom in doms:
+        dom_dict = dict(number=dom.number, person=dom.person, action=dom.action)
+        num_list.append(dom_dict)
+    sess.close()
+    return num_list
