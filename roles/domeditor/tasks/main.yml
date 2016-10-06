@@ -30,6 +30,8 @@
   with_items:
     - view.py
     - model.py
+    - appcert.crt
+    - appkey.key
   notify: "restart {{appname}}"
 
 
