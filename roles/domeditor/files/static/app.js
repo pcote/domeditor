@@ -1,5 +1,6 @@
 $(function(){
 
+    /********** Utility functions for formatting dom numbers and getting/setting field vals********/
     var twoDigitFormat = function(num){
         strNum = String(num);
         if(strNum.length === 1){
@@ -40,6 +41,10 @@ $(function(){
         $(fieldId).val(fieldVal);
     };
 
+    /************ end of do dom number utility functions **********************/
+
+
+    /************** On page load, generate the base dom number table**************/
     var i;
     var numList = _.range(0,100);
     var domNumbers = [];
@@ -57,6 +62,10 @@ $(function(){
     var renderedDom = $(renderedText);
     $("#tableDiv").append(renderedDom);
 
+    /***************** end base dom number table generation ********************/
+
+
+    /************ ajax functions for saving and reverting dom numbers ***************/
     var getCreds = function(){
         var req = {
             url: "/usercreds",
@@ -153,6 +162,9 @@ $(function(){
     $(".table").on("click", ".saveButton", saveButtonHandler);
 
     $(".table").on("click", ".revertButton", revertButtonHandler);
+
+    /********** end ajax functions for saving and reverting dom numbers **********/
+     
 
     /************ LOAD UP HANDLERS FOR THE PAGE WITH CURRENT DOM NUMBERS FOR THIS USER ****************/
     var downloadDomSet = function(creds){
