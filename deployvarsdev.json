@@ -3,5 +3,9 @@
     "domain":"domeditor.com",
     "appname":"domeditor",
     "mysql_root_password":"rootPassword",
-    "proxyport":3032
+    "proxyport":3032,
+    "certcountry": "US",
+    "certstate": "NY",
+    "certcity": "New York City"
+
 }

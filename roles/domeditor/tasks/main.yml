@@ -61,6 +61,10 @@
     group: www-data
   notify: restart nginx
 
+- name: set up the ssl key
+  command: openssl req -x509 -days 365 -nodes -newkey rsa:4096 -out /var/app/{{appname}}/{{appname}}.crt -keyout /var/app/{{appname}}/{{appname}}.key -subj "/C={{certcountry}}/ST={{certstate}}/L={{certcity}}/O=IT/CN=P{{domain}}"
+  notify: restart nginx
+
 - name: copy over the template for config.ini
   template:
     src: config.ini.template
