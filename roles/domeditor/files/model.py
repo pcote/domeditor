@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Text, Integer, VARCHAR, Boolean, ForeignKey
+from sqlalchemy import create_engine, Column, Text, Integer, VARCHAR, BLOB, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from configparser import ConfigParser
@@ -44,6 +44,10 @@ class User(Base):
     def get_id(self):
         return self.username
 
+class Salt(Base):
+    __tablename__ = "salts"
+    username = Column(ForeignKey("users.username"), primary_key=True)
+    salt = Column(BLOB)
 
 Session = sessionmaker(bind=eng)
 Base.metadata.create_all(eng)
@@ -52,10 +56,13 @@ Base.metadata.create_all(eng)
 def create_user(uname, pw):
     sess = Session()
     hasher = hashlib.sha256()
-    hasher.update(pw.encode())
+    salt_data = os.urandom(16)
+    hasher.update(salt_data + pw.encode())
     digest = hasher.hexdigest()
     user = User(username=uname, password=digest)
+    salt = Salt(username=uname, salt=salt_data)
     sess.add(user)
+    sess.add(salt)
     sess.commit()
     sess.close()
     return "created user: {}".format(uname)
@@ -68,13 +75,19 @@ def get_user(uname):
     return user
 
 
+def get_salt(uname):
+    sess = Session()
+    salt = sess.query(Salt).filter_by(username=uname).one_or_none()
+    sess.close()
+    return salt.salt
 
 def is_password_valid(uname, pw, prehashed=False):
     if prehashed:
         password_arg = pw
     else:
+        salt_data = get_salt(uname)
         hasher = hashlib.sha256()
-        hasher.update(pw.encode())
+        hasher.update(salt_data + pw.encode())
         password_arg = hasher.hexdigest()
 
     user = get_user(uname)
