@@ -4,6 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from configparser import ConfigParser
 import os
 import hashlib
+import re
+import string
 
 db_name = "appname"
 
@@ -53,7 +55,26 @@ Session = sessionmaker(bind=eng)
 Base.metadata.create_all(eng)
 
 
+def password_strong(pw):
+    MIN_PW_LENGTH = 8
+    if len(pw) < MIN_PW_LENGTH:
+        return False
+    if not re.search(r"\d+", pw):
+        return False
+    if not re.search(r"\w+", pw):
+        return False
+    if re.search(r"\s+", pw):
+        return False
+    if not set(string.punctuation).intersection(pw):
+        return False
+    return True
+
+
 def create_user(uname, pw):
+    if not password_strong(pw):
+        msg = "Password requirements not met: Must be 8 characters or more with letters, numbers, punctuation, and no spaces"
+        return msg
+
     sess = Session()
     hasher = hashlib.sha256()
     salt_data = os.urandom(16)
