@@ -83,6 +83,7 @@ def create_user(uname, pw):
     user = User(username=uname, password=digest)
     salt = Salt(username=uname, salt=salt_data)
     sess.add(user)
+    sess.commit()
     sess.add(salt)
     sess.commit()
     sess.close()
