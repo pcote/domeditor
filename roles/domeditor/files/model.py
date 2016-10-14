@@ -37,19 +37,22 @@ class DomNumber(Base):
 class User(Base):
     __tablename__ = "users"
     username = Column(VARCHAR(50), primary_key=True, nullable=False)
-    password = Column(Text, nullable=False)
     is_active = Column(Boolean, default=False)
     is_authenticated = Column(Boolean, default=False)
     is_anonymous = Column(Boolean, default=False)
     dom_numbers = relationship("DomNumber")
+    password = relationship("Password", uselist=False, lazy="joined")
 
     def get_id(self):
         return self.username
 
-class Salt(Base):
-    __tablename__ = "salts"
+
+class Password(Base):
+    __tablename__ = "passwords"
     username = Column(ForeignKey("users.username"), primary_key=True)
+    password = Column(Text, nullable=False)
     salt = Column(BLOB)
+
 
 Session = sessionmaker(bind=eng)
 Base.metadata.create_all(eng)
@@ -80,11 +83,11 @@ def create_user(uname, pw):
     salt_data = os.urandom(16)
     hasher.update(salt_data + pw.encode())
     digest = hasher.hexdigest()
-    user = User(username=uname, password=digest)
-    salt = Salt(username=uname, salt=salt_data)
+
+    user = User(username=uname)
+    user.password = Password(password=digest, salt=salt_data)
+
     sess.add(user)
-    sess.commit()
-    sess.add(salt)
     sess.commit()
     sess.close()
     return "created user: {}".format(uname)
@@ -99,9 +102,11 @@ def get_user(uname):
 
 def get_salt(uname):
     sess = Session()
-    salt = sess.query(Salt).filter_by(username=uname).one_or_none()
+    user = sess.query(User).filter_by(username=uname).one_or_none()
+    salt = user.password.salt
     sess.close()
-    return salt.salt
+    return salt
+
 
 def is_password_valid(uname, pw, prehashed=False):
     if prehashed:
@@ -113,7 +118,7 @@ def is_password_valid(uname, pw, prehashed=False):
         password_arg = hasher.hexdigest()
 
     user = get_user(uname)
-    if user and user.password == password_arg:
+    if user and user.password.password == password_arg:
         return True
     return False
 
